@@ -94,12 +94,11 @@ if __name__ == '__main__':
             else:
                 delete(tree)
         elif cmd[0] == "display":
-            if len(cmd)>1 and cmd[1]=="--all"
+            if len(cmd)>1 and cmd[1]=="--all":
                 display(tree)
             else:
                 display(tree, abstract=True)
         elif cmd[0] == "save":
             save(tree)
-            
         elif cmd[0] == "quit":
             exit(0)
