@@ -1,0 +1,42 @@
+<assignments>
+  <assignment>
+    <id>workReminder</id>
+    <deadline>20200208</deadline>
+    <executiontime>
+      <min>10:00:00</min>
+      <max>20:00:00</max>
+    </executiontime>
+    <difficulty>Hard</difficulty>
+    <importance>Very Important</importance>
+  </assignment>
+  <assignment>
+    <id>watch DoctorWho</id>
+    <deadline>20200224</deadline>
+    <executiontime>
+      <min>09:00:00</min>
+      <max>13:00:00</max>
+    </executiontime>
+    <difficulty>Easy</difficulty>
+    <importance>Important</importance>
+  </assignment>
+  <assignment>
+    <id>Geogebra</id>
+    <deadline>20200512</deadline>
+    <executiontime>
+      <min>03:00:00</min>
+      <max>07:00:00</max>
+    </executiontime>
+    <difficulty>Hard</difficulty>
+    <importance>Low</importance>
+  </assignment>
+  <assignment>
+    <id>&#48660;&#47196;&#44536; &#50732;&#47532;&#44592;</id>
+    <deadline>20200505</deadline>
+    <executiontime>
+      <min>05:00:00</min>
+      <max>05:10:00</max>
+    </executiontime>
+    <difficulty>Easy</difficulty>
+    <importance>Important</importance>
+  </assignment>
+</assignments>

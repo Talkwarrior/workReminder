@@ -1,10 +1,10 @@
 import xml.etree.ElementTree as elemTree
-import sys
-
 '''
 Idea from
 https://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
 '''
+
+
 def indent(elem, level=0):
     i = "\n" + level*"  "
     if len(elem):
@@ -19,6 +19,7 @@ def indent(elem, level=0):
     else:
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
+
 
 def display(tree, abstract=False):
     if abstract:
@@ -38,6 +39,7 @@ def display(tree, abstract=False):
         print("  This is %s mission." %(assignment.find("difficulty").text))
         print("  Also, this mission is %s."%(assignment.find("importance").text), end="\n\n")
 
+
 def append(tree):
     # 변수 선언
     print("Initializing new assignment:")
@@ -53,6 +55,7 @@ def append(tree):
     elemTree.SubElement(assignment, "difficulty").text = input("Difficulty: ")
     elemTree.SubElement(assignment, "importance").text = input("Importance: ")
 
+
 def delete(tree, num=None):
     if num==None:
         display(tree, abstract=True)
@@ -61,17 +64,15 @@ def delete(tree, num=None):
     root = tree.getroot()
     root.remove(root.findall("assignment")[num-1])
 
+
 def save(tree, pretty_print=True):
     if pretty_print:
         indent(tree.getroot())
-    tree.write(sys.argv[1])
+    tree.write('data/data.xml')
+
 
 if __name__ == '__main__':
-    if len(sys.argv)==1:
-        print("FilePath Missing: python edit_cli.py data.xml")
-        exit(0)
-
-    tree = elemTree.parse(sys.argv[1])
+    tree = elemTree.parse('data/data.xml')
 
     message = """
     =======================================
@@ -101,4 +102,5 @@ if __name__ == '__main__':
         elif cmd[0] == "save":
             save(tree)
         elif cmd[0] == "quit":
+            save(tree)
             exit(0)

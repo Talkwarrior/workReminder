@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Warn1</class>
- <widget class="QMainWindow" name="Warn1">
+ <class>Window</class>
+ <widget class="QMainWindow" name="Window">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
+    <width>520</width>
     <height>365</height>
    </rect>
   </property>
@@ -29,13 +29,13 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>10</y>
       <width>441</width>
       <height>331</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
+    <layout class="QGridLayout" name="MainLayout">
      <property name="horizontalSpacing">
       <number>20</number>
      </property>
