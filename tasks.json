@@ -1,0 +1,20 @@
+{
+  "tasks": [
+    {
+      "label": "이름",
+      "deadline": "2020-05-16",
+      "require": "None",
+      "type": "과목이름/프로젝트/수행평가/...",
+      "description": "문제수/중요도/연계성",
+      "co_work": "True/False"
+    },
+    {
+      "label": "이름",
+      "deadline": "2020-05-16",
+      "require": "None",
+      "type": "과목이름/프로젝트/수행평가/...",
+      "description": "문제수/중요도/연계성",
+      "co_work": "True/False"
+    }
+  ]
+}
