@@ -22,21 +22,43 @@ import json
 
 
 class PyTask:
-    def __init__(self, _label="", _deadline="", _type="", _description="", _co_work=""):
+    def __init__(self, _label="", _deadline="", _type="", _require="", _description="", _co_work="", _dict=None):
+        if _dict is not None:
+            self.load_dict(_dict)
+            return
+
         self.label = _label
         self.deadline = _deadline
         self.type = _type
+        self.require = _require
         self.description = _description
         self.co_work = _co_work
 
     def __str__(self): return self.label
 
     def __repr__(self):
-        return self.__dict__.__str__()
+        return self.__dict__().__str__()
 
     def __cmp__(self, other):
         return self.label > other.label
 
+    def __dict__(self):
+        data = dict()
+        data['label'] = self.label
+        data['deadline'] = self.deadline
+        data['type'] = self.type
+        data['require'] = self.require
+        data['description'] = self.description
+        data['co_work'] = self.co_work
+        return data
+
+    def load_dict(self, dictionary):
+        self.label = dictionary['label']
+        self.deadline = dictionary['deadline']
+        self.type = dictionary['type']
+        self.require = dictionary['require']
+        self.description = dictionary['description']
+        self.co_work = dictionary['co_work']
 
 """
     TaskSeries class for workReminder.
@@ -51,23 +73,14 @@ class PyTask:
 
 
 class TaskSeries(list):
-    def __init__(self, lst=[]):
-        super().__init__(lst)
+    def __init__(self, lst=None):
+        if lst is not None:
+            super().__init__(lst)
+        else:
+            super().__init__()
 
     def __str__(self):
-        return ' '.join([task.__str__() for task in self])
-
-    def save_file(self, filename, overwrite=False):
-        if filename is None:
-            return
-        if os.path.isfile(filename) and not overwrite:
-            print(f"Cannot Overwrite {filename}. The file already exists.")
-            return
-        with open(filename, 'w', encoding='UTF8') as f:
-            data = dict()
-            data["tasks"] = self  # represent error
-            print(data)
-            json.dump(data, f, indent="\t")
+        return ' '.join([str(task) for task in self])
 
     def load_file(self, filename):
         if filename is None:
@@ -77,8 +90,18 @@ class TaskSeries(list):
             return
         with open(filename, encoding='UTF8') as f:
             data = json.load(f)
-            print(data['tasks'])
-        self = TaskSeries(data['tasks'])
+        self.extend([PyTask(_dict=task) for task in data['tasks']])
+
+    def save_file(self, filename, overwrite=False):
+        if filename is None:
+            return
+        if os.path.isfile(filename) and not overwrite:
+            print(f"Cannot Overwrite {filename}. The file already exists.")
+            return
+        with open(filename, 'w', encoding='UTF8') as f:
+            data = dict()
+            data["tasks"] = [x.__dict__() for x in self]
+            f.write(json.dumps(data, ensure_ascii=False, indent='\t'))
 
 
 if __name__ == '__main__':
