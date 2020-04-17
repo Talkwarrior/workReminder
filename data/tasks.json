@@ -1,20 +1,44 @@
 {
-  "tasks": [
-    {
-      "label": "name1",
-      "deadline": "2020-05-16",
-      "require": "None",
-      "type": "과목이름/프로젝트/수행평가/...",
-      "description": "문제수/중요도/연계성",
-      "co_work": "True/False"
-    },
-    {
-      "label": "name5",
-      "deadline": "2020-05-16",
-      "require": "None",
-      "type": "과목이름/프로젝트/수행평가/...",
-      "description": "문제수/중요도/연계성",
-      "co_work": "False"
-    }
-  ]
+	"tasks": [
+		{
+			"label": "name1",
+			"deadline": "2020-05-16",
+			"type": "과목이름/프로젝트/수행평가/...",
+			"require": "None",
+			"description": "문제수/중요도/연계성",
+			"co_work": "True/False"
+		},
+		{
+			"label": "name1",
+			"deadline": "2020-05-16",
+			"type": "과목이름/프로젝트/수행평가/...",
+			"require": "None",
+			"description": "문제수/중요도/연계성",
+			"co_work": "True/False"
+		},
+		{
+			"label": "name1",
+			"deadline": "2020-05-16",
+			"type": "과목이름/프로젝트/수행평가/...",
+			"require": "None",
+			"description": "문제수/중요도/연계성",
+			"co_work": "True/False"
+		},
+		{
+			"label": "new",
+			"deadline": "수 1 1 2020",
+			"type": "수행평가",
+			"require": "12:00:00",
+			"description": "문제수/중요도/연계성 등\n기타 설명\n",
+			"co_work": false
+		},
+		{
+			"label": "new2",
+			"deadline": "수 1 1 2020",
+			"type": "수행평가",
+			"require": "12:00:00",
+			"description": "문제수/중요도/연계성 등\n기타 설명\n",
+			"co_work": false
+		}
+	]
 }

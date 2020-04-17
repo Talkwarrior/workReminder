@@ -34,11 +34,13 @@ class PyTask:
         self.description = _description
         self.co_work = _co_work
 
+    # TODO: improve __str__
     def __str__(self): return self.label
 
     def __repr__(self):
         return self.__dict__().__str__()
 
+    # TODO: improve __cmp__
     def __cmp__(self, other):
         return self.label > other.label
 
