@@ -1,7 +1,7 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets
 from PyQt5 import uic
 import os
-import pyTask
+from utils import pyTask
 from .dial import Dialog
 
 
@@ -30,7 +30,6 @@ class MainWindow(QtWidgets.QMainWindow):
         actionSave.triggered.connect(self.ASave)
         filemenu.addAction(actionSave)
 
-    # TODO: complete updateTable, set size
     def updateTable(self):
         self.taskTable.clear()
         elem = ['label', 'deadline', 'require', 'type']
@@ -48,7 +47,8 @@ class MainWindow(QtWidgets.QMainWindow):
         if os.path.isfile('data/tasks.json'):
             self.tasks.load_file('data/tasks.json')
         else:
-            open('data/tasks.json').close()
+            with open('data/tasks.json', 'w') as f:
+                self.ASave()
 
     def AAdd(self):
         dial = Dialog()
@@ -56,6 +56,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         task = dial.getTask()
 
+        # Fixme: It adds when we cancels either.
         if task is not None:
             self.tasks.append(task)
             self.updateTable()
@@ -70,5 +71,23 @@ class MainWindow(QtWidgets.QMainWindow):
         pass
 
     def ASave(self):
-        print("save")
         self.tasks.save_file('data/tasks.json', overwrite=True)
+
+    def AEdit(self, row):
+        sub = Dialog(self.tasks[row])
+        pass
+
+    def closeEvent(self, event):
+        close = QtWidgets.QMessageBox()
+        close.setText("저장하시겠습니까?")
+        close.setWindowTitle("종료하기")
+        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Cancel)
+        close = close.exec()
+
+        if close == QtWidgets.QMessageBox.Yes:
+            self.ASave()
+            event.accept()
+        elif close == QtWidgets.QMessageBox.No:
+            event.accept()
+        else:
+            event.ignore()
