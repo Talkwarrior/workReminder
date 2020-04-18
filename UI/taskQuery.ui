@@ -80,20 +80,6 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QTimeEdit" name="TimeEdit">
-      <property name="displayFormat">
-       <string>h:mm</string>
-      </property>
-      <property name="time">
-       <time>
-        <hour>12</hour>
-        <minute>0</minute>
-        <second>0</second>
-       </time>
-      </property>
-     </widget>
-    </item>
     <item row="3" column="0">
      <widget class="QLabel" name="type">
       <property name="text">
@@ -148,6 +134,60 @@
        <string>문제수/중요도/연계성 등
 기타 설명
 </string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QTimeEdit" name="TimeEdit">
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2020</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="maximumDateTime">
+       <datetime>
+        <hour>23</hour>
+        <minute>59</minute>
+        <second>59</second>
+        <year>2020</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="maximumTime">
+       <time>
+        <hour>23</hour>
+        <minute>59</minute>
+        <second>59</second>
+       </time>
+      </property>
+      <property name="minimumTime">
+       <time>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+       </time>
+      </property>
+      <property name="currentSection">
+       <enum>QDateTimeEdit::HourSection</enum>
+      </property>
+      <property name="displayFormat">
+       <string>h:mm</string>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+      <property name="time">
+       <time>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+       </time>
       </property>
      </widget>
     </item>

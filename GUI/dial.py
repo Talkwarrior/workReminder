@@ -15,6 +15,7 @@ class Dialog(QtWidgets.QDialog):
     def loadui(self):
         uic.loadUi("UI/taskQuery.ui", self)
         self.buttonBox.accepted.connect(self.btnAccepted)
+        self.buttonBox.rejected.connect(self.btnRejected)
 
         if self.task is None:
             self.DateEdit.setDate(QtCore.QDate.currentDate())
@@ -23,14 +24,15 @@ class Dialog(QtWidgets.QDialog):
 
     def setupUiWithTask(self):
         self.LblEdit.setText(self.task.label)
-        self.DateEdit.setDate(QtCore.QDate.fromString(self.task.deadline, )) # 수 1 1 2020
-        # QtWidgets.QDateEdit.setDate()
-        # self.DescriptionEdit.setText(self.task.description)
+
+        self.DateEdit.setDate(QtCore.QDate.fromString(self.task.deadline, "yyyy/MM/dd"))
+        self.DescriptionEdit.setPlainText(self.task.description)
+
         if self.task.type in types.keys():
             self.TypeBox.setCurrentIndex(types[self.task.type])
         else:
             self.TypeBox.setCurrentIndex(3)
-        # self.TimeEdit.setTime(QtCore.QTime(self.task.require))  # PyQt5.QtCore.QTime(12, 0)
+        self.TimeEdit.setTime(QtCore.QTime.fromString(self.task.require, "TTh MMm"))
         self.Co_Work.setChecked(self.task.co_work)
 
     def btnAccepted(self):
@@ -41,7 +43,6 @@ class Dialog(QtWidgets.QDialog):
         require = normalizeTime(self.TimeEdit.time().toString())  # PyQt5.QtCore.QTime(12, 0)
         co_work = self.Co_Work.isChecked()
 
-        print(dline, require)
         self.task = PyTask(_label=lbl,
                            _deadline=dline,
                            _description=description,
@@ -50,6 +51,10 @@ class Dialog(QtWidgets.QDialog):
                            _require=require
                            )
 
+        self.close()
+
+    def btnRejected(self):
+        self.task = None
         self.close()
 
     def getTask(self):

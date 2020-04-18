@@ -37,11 +37,11 @@ class MainWindow(QtWidgets.QMainWindow):
             task.__dict__().values()
             for col in range(4):
                 self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
-        pass
 
     def setEventListener(self):
         self.addButton.clicked.connect(self.AAdd)
         self.delButton.clicked.connect(self.ADelete)
+        self.taskTable.doubleClicked.connect(self.AEdit)
 
     def loadData(self):
         if os.path.isfile('data/tasks.json'):
@@ -68,14 +68,18 @@ class MainWindow(QtWidgets.QMainWindow):
         for line in selected:
             del self.tasks[line]
         self.updateTable()
-        pass
 
     def ASave(self):
         self.tasks.save_file('data/tasks.json', overwrite=True)
 
-    def AEdit(self, row):
+    def AEdit(self):
+        row = self.taskTable.selectedItems()[0].row()
         sub = Dialog(self.tasks[row])
-        pass
+        sub.exec_()
+
+        task = sub.getTask()
+        self.tasks[row] = task
+        self.updateTable()
 
     def closeEvent(self, event):
         close = QtWidgets.QMessageBox()
