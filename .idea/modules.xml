@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/WorkReminder.iml" filepath="$PROJECT_DIR$/.idea/WorkReminder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/workReminder.iml" filepath="$PROJECT_DIR$/.idea/workReminder.iml" />
     </modules>
   </component>
 </project>

@@ -1,7 +1,24 @@
-# workReminder
-Have you ever felt that your current business is caused by your neglect?
+과제독촉기: 1.0.1
+================
+## 과제독촉기란? 
+    과제를 모두 파악하고, 제출 기한이 임박했을 때 윈도우 알림을 보여주는 프로그램
 
-Do you think you can live much leisurely?
-<b>THE ANSWER  IS HERE.</b>
+## 기능(1.0.1 기준)
+> + 과제 목록 저장
+> + 과제 목록 관리 및 기록
 
-workReminder is a auto-execute script that monitors your task <b>and notices your work is not done yet.
+## 개발 계획
+> 버전 1:
+>   + 과제 관리 기능
+>
+> 버전 2: 
+>   + 과제 독촉 기능
+>
+> 버전 3:
+>   + 편의성 개선
+>
+> 버전 4:
+>   + 구글 클래스룸 연동
+>
+> 버전 5:
+>   + 팝업 기능 향상
