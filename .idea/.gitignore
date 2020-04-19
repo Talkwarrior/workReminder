@@ -1,2 +1,6 @@
 # Default ignored files
 /workspace.xml
+.idea
+__pycache__
+features
+TODOS.txt
