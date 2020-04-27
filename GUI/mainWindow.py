@@ -36,14 +36,23 @@ class MainWindow(QtWidgets.QMainWindow):
         viewCoWork.toggled.connect(self.updateTable)
         viewmenu.addAction(viewCoWork)
 
-    def updateTable(self):
+    def updateTable(self, co_work_Only=False):
         self.taskTable.clear()
         elem = ['label', 'deadline', 'require', 'type']
-        for row, task in enumerate(self.tasks):
-            # TODO: co_work_Only Mode
-            # if self.menuBar.
-            for col in range(4):
-                self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
+
+        row = 0
+        if co_work_Only:
+            for task in self.tasks:
+                if co_work_Only and task.co_work:
+                    for col in range(4):
+                        self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
+                    row += 1
+        else:
+            for task in self.tasks:
+                for col in range(4):
+                    self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
+                row += 1
+
 
     def setEventListener(self):
         self.addButton.clicked.connect(self.AAdd)
@@ -75,6 +84,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.updateTable()
 
     def ADelete(self):
+        # TODO: delete by data, not row
         selected = self.taskTable.selectedItems()
 
         selected = [selected[l*4].row() for l in range(0, int(len(selected)/4))]
