@@ -84,12 +84,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.updateTable()
 
     def ADelete(self):
-        # TODO: delete by data, not row
         selected = self.taskTable.selectedItems()
-
-        selected = [selected[l*4].row() for l in range(0, int(len(selected)/4))]
-        for line in selected:
-            del self.tasks[line]
+        # FIXME: do not delete empty items
+        selected = [selected[l*4].text() for l in range(0, int(len(selected)/4))]
+        self.tasks.delete(labels=selected) # list of work label
         self.updateTable()
 
     def ASave(self):

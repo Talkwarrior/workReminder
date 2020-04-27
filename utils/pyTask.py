@@ -105,6 +105,12 @@ class TaskSeries(list):
             data["tasks"] = [x.__dict__() for x in self]
             f.write(json.dumps(data, ensure_ascii=False, indent='\t'))
 
+    def delete(self, labels=None):
+        if labels==None:
+            return
+        for task in self:
+            if task.label in labels:
+                self.remove(task)
 
 if __name__ == '__main__':
     print("pyTask v0.0.1")
