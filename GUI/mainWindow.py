@@ -20,9 +20,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.updateTable()
 
         # init menubar
-        menubar = self.menuBar()
+        menubar = self.menuBar
         menubar.setNativeMenuBar(False)
         filemenu = menubar.addMenu('&File')
+        viewmenu = menubar.addMenu('&View')
 
         actionSave = QtWidgets.QAction(QtGui.QIcon("data/images/save.png"), "Save", self)
         actionSave.setShortcut('Ctrl+S')
@@ -30,18 +31,24 @@ class MainWindow(QtWidgets.QMainWindow):
         actionSave.triggered.connect(self.ASave)
         filemenu.addAction(actionSave)
 
+        viewCoWork = QtWidgets.QAction("CoWork only", self)
+        viewCoWork.setCheckable(True)
+        viewCoWork.toggled.connect(self.updateTable)
+        viewmenu.addAction(viewCoWork)
+
     def updateTable(self):
         self.taskTable.clear()
         elem = ['label', 'deadline', 'require', 'type']
         for row, task in enumerate(self.tasks):
-            task.__dict__().values()
+            # TODO: co_work_Only Mode
+            # if self.menuBar.
             for col in range(4):
                 self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
 
     def setEventListener(self):
         self.addButton.clicked.connect(self.AAdd)
         self.delButton.clicked.connect(self.ADelete)
-        self.taskTable.doubleClicked.connect(self.AEdit)
+        self.taskTable.doubleClicked.connect(self.tableDblClicked)
 
     def loadData(self):
         if os.path.isfile('data/tasks.json'):
@@ -50,13 +57,19 @@ class MainWindow(QtWidgets.QMainWindow):
             with open('data/tasks.json', 'w') as f:
                 self.ASave()
 
+    def tableDblClicked(self):
+        selected = self.taskTable.selectedItems()
+        if len(selected) == 0 or selected[0].row() >= len(self.tasks):
+            self.AAdd()
+        else:
+            self.AEdit(selected[0].row())
+
     def AAdd(self):
         dial = Dialog()
         dial.exec_()
 
         task = dial.getTask()
 
-        # Fixme: It adds when we cancels either.
         if task is not None:
             self.tasks.append(task)
             self.updateTable()
@@ -72,8 +85,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def ASave(self):
         self.tasks.save_file('data/tasks.json', overwrite=True)
 
-    def AEdit(self):
-        row = self.taskTable.selectedItems()[0].row()
+    def AEdit(self, row):
         sub = Dialog(self.tasks[row])
         sub.exec_()
 
