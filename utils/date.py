@@ -3,11 +3,9 @@ from PyQt5.QtCore import QDate
 
 def normalizeDate(date):
     # converts data format.
-    # "토 4 18 2020" -> "2020/4/18"
+    # "토 4 18 2020" -> "2020/04/18"
     date = date.split(' ')
-    # TODO: fill 0 among the numbers
-    return f"{date[3]}/{date[1]}/{date[2]}"
-
+    return f"{date[3].zfill(4)}/{date[1].zfill(2)}/{date[2].zfill(2)}"
 
 def normalizeTime(time):
     # converts time format.
