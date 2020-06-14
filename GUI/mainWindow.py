@@ -1,5 +1,4 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5 import uic
 import os
 from utils import pyTask
 from .dial import Dialog
@@ -16,15 +15,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setEventListener()
 
     def loadUi(self):
-        # uic.loadUi("UI/main.ui", self)
         self.setupUi()
         self.updateTable()
 
     def setupUi(self):
         self.setObjectName("MainWindow")
         self.resize(670, 547)
-        self.setMinimumSize(QtCore.QSize(670, 400))
-        self.setMaximumSize(QtCore.QSize(670, 800))
+        self.setMinimumSize(QtCore.QSize(670, 600))
+        self.setMaximumSize(QtCore.QSize(670, 600))
         self.setDocumentMode(False)
         self.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.setDockNestingEnabled(False)
@@ -33,7 +31,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
         self.taskTable = QtWidgets.QTableWidget(self.centralwidget)
-        self.taskTable.setGeometry(QtCore.QRect(20, 20, 531, 476))
+        self.taskTable.setGeometry(QtCore.QRect(20, 20, 531, 500))
         self.taskTable.setMinimumSize(QtCore.QSize(0, 0))
         self.taskTable.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.taskTable.setDragDropMode(QtWidgets.QAbstractItemView.NoDragDrop)
@@ -41,7 +39,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.taskTable.setShowGrid(True)
         self.taskTable.setWordWrap(False)
         self.taskTable.setCornerButtonEnabled(True)
-        self.taskTable.setRowCount(23)
+        self.taskTable.setRowCount(20)
         self.taskTable.setColumnCount(4)
         self.taskTable.setObjectName("taskTable")
 
@@ -125,7 +123,7 @@ class MainWindow(QtWidgets.QMainWindow):
         co_work_Only = self.viewCoWork.isChecked()
         if co_work_Only:
             for task in self.tasks:
-                if co_work_Only and task.co_work:
+                if task.co_work:
                     for col in range(4):
                         self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
                     row += 1
@@ -168,9 +166,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def ADelete(self):
         selected = self.taskTable.selectedItems()
-        # FIXME: do not delete empty items
-        selected = [selected[l*4].text() for l in range(0, int(len(selected)/4))]
-        self.tasks.delete(labels=selected) # list of work label
+        selected = [item.text() for item in selected if item is not None and item.column()==0]
+        self.tasks.delete(labels=selected) # list of work labels
         self.updateTable()
 
     def ASave(self):

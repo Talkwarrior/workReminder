@@ -71,6 +71,7 @@ class PyTask:
         __repr__()          introduces self tasks
         save_file(filename)     save to file(.json)
         load_file(filename)      load series from file(.json)
+        delete(listofLabel, listofTask)     delete tasks in argument
 """
 
 
@@ -96,21 +97,29 @@ class TaskSeries(list):
 
     def save_file(self, filename, overwrite=False):
         if filename is None:
-            return
+            return False
         if os.path.isfile(filename) and not overwrite:
             print(f"Cannot Overwrite {filename}. The file already exists.")
-            return
+            return False
         with open(filename, 'w', encoding='UTF8') as f:
             data = dict()
             data["tasks"] = [x.__dict__() for x in self]
             f.write(json.dumps(data, ensure_ascii=False, indent='\t'))
+            return True
 
-    def delete(self, labels=None):
-        if labels==None:
+    def delete(self, labels=None, tasks=None):
+        try:
+            if labels is not None:
+                for task in reversed(self):
+                    if task.label in labels:
+                        self.remove(task)
+            elif tasks is not None:
+                for task in reversed(self):
+                    if task in tasks:
+                        self.remove(task)
+        except TypeError:
             return
-        for task in self:
-            if task.label in labels:
-                self.remove(task)
+
 
 if __name__ == '__main__':
-    print("pyTask v0.0.1")
+    print("pyTask v0.0.3")
