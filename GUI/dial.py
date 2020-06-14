@@ -14,8 +14,6 @@ class Dialog(QtWidgets.QDialog):
 
     def loadUI(self):
         # TODO: enable selecting time longer than 24h
-        # uic.loadUi("UI/taskQuery.ui", self)
-
         self.setObjectName("taskQuery")
         self.resize(330, 321)
         self.setMinimumSize(QtCore.QSize(330, 321))

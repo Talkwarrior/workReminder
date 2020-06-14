@@ -120,6 +120,10 @@ class TaskSeries(list):
         except TypeError:
             return
 
+    def find(self, label):
+        for idx, task in enumerate(self):
+            if task.label == label:
+                return idx
 
 if __name__ == '__main__':
     print("pyTask v0.0.3")

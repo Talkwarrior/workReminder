@@ -2,27 +2,26 @@ from PyQt5 import QtGui, QtWidgets, QtCore
 import os
 from utils import pyTask
 from .dial import Dialog
-
+from .taskWidget import taskWidget
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.tasks = pyTask.TaskSeries()
+        self.tableRow = len(self.tasks)
+
         self.loadData()
-
-        self.loadUi()
-        self.setEventListener()
-
-    def loadUi(self):
         self.setupUi()
-        self.updateTable()
+
+        self.updateUI()
+        self.setEventListener()
 
     def setupUi(self):
         self.setObjectName("MainWindow")
-        self.resize(670, 547)
-        self.setMinimumSize(QtCore.QSize(670, 600))
-        self.setMaximumSize(QtCore.QSize(670, 600))
+        self.resize(670, 587)
+        self.setMinimumSize(QtCore.QSize(670, 400))
+        self.setMaximumSize(QtCore.QSize(670, 800))
         self.setDocumentMode(False)
         self.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.setDockNestingEnabled(False)
@@ -30,8 +29,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setUnifiedTitleAndToolBarOnMac(False)
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
-        self.taskTable = QtWidgets.QTableWidget(self.centralwidget)
-        self.taskTable.setGeometry(QtCore.QRect(20, 20, 531, 500))
+        self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
+        self.stackedWidget.setGeometry(QtCore.QRect(0, 30, 671, 511))
+        self.stackedWidget.setObjectName("stackedWidget")
+        self.page = QtWidgets.QWidget()
+        self.page.setObjectName("page")
+        self.frame = QtWidgets.QFrame(self.page)
+        self.frame.setGeometry(QtCore.QRect(0, 10, 661, 501))
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.taskTable = QtWidgets.QTableWidget(self.frame)
+        self.taskTable.setGeometry(QtCore.QRect(10, 10, 531, 476))
         self.taskTable.setMinimumSize(QtCore.QSize(0, 0))
         self.taskTable.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.taskTable.setDragDropMode(QtWidgets.QAbstractItemView.NoDragDrop)
@@ -39,10 +48,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.taskTable.setShowGrid(True)
         self.taskTable.setWordWrap(False)
         self.taskTable.setCornerButtonEnabled(True)
-        self.taskTable.setRowCount(20)
+        self.taskTable.setRowCount(23)
         self.taskTable.setColumnCount(4)
         self.taskTable.setObjectName("taskTable")
-
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         self.taskTable.setHorizontalHeaderItem(0, item)
@@ -57,13 +65,32 @@ class MainWindow(QtWidgets.QMainWindow):
         self.taskTable.setHorizontalHeaderItem(3, item)
         self.taskTable.horizontalHeader().setCascadingSectionResizes(True)
         self.taskTable.horizontalHeader().setDefaultSectionSize(120)
-        self.addButton = QtWidgets.QPushButton(self.centralwidget)
-        self.addButton.setGeometry(QtCore.QRect(560, 20, 93, 28))
-        self.addButton.setObjectName("addButton")
-        self.delButton = QtWidgets.QPushButton(self.centralwidget)
-        self.delButton.setGeometry(QtCore.QRect(560, 60, 93, 28))
+        self.delButton = QtWidgets.QPushButton(self.frame)
+        self.delButton.setGeometry(QtCore.QRect(550, 60, 93, 28))
         self.delButton.setObjectName("delButton")
+        self.addButton = QtWidgets.QPushButton(self.frame)
+        self.addButton.setGeometry(QtCore.QRect(550, 20, 93, 28))
+        self.addButton.setObjectName("addButton")
+        self.stackedWidget.addWidget(self.page)
+        self.page_2 = QtWidgets.QWidget()
+        self.page_2.setObjectName("page_2")
+        self.taskTabs = QtWidgets.QTabWidget(self.page_2)
+        self.taskTabs.setGeometry(QtCore.QRect(10, 10, 651, 501))
+        self.taskTabs.setMinimumSize(QtCore.QSize(651, 501))
+        self.taskTabs.setMaximumSize(QtCore.QSize(651, 501))
+        self.taskTabs.setTabPosition(QtWidgets.QTabWidget.West)
+        self.taskTabs.setTabShape(QtWidgets.QTabWidget.Rounded)
+        self.taskTabs.setElideMode(QtCore.Qt.ElideNone)
+        self.taskTabs.setDocumentMode(False)
+        self.taskTabs.setTabsClosable(False)
+        self.taskTabs.setMovable(True)
+        self.taskTabs.setTabBarAutoHide(False)
+        self.taskTabs.setObjectName("taskTabs")
 
+        self.stackedWidget.addWidget(self.page_2)
+        self.btn_nextPage = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_nextPage.setGeometry(QtCore.QRect(560, 0, 81, 28))
+        self.btn_nextPage.setObjectName("btn_nextPage")
         self.setCentralWidget(self.centralwidget)
         self.statusBar = QtWidgets.QStatusBar(self)
         self.statusBar.setObjectName("statusBar")
@@ -90,28 +117,42 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menubar.addAction(self.viewmenu.menuAction())
 
         self.retranslateUi()
+        self.stackedWidget.setCurrentIndex(0)
+        self.taskTabs.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self)
-
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("self", "과제독촉기"))
+        self.setWindowTitle(_translate("MainWindow", "과제독촉기"))
         self.taskTable.setSortingEnabled(False)
         item = self.taskTable.horizontalHeaderItem(0)
-        item.setText(_translate("self", "이름"))
+        item.setText(_translate("MainWindow", "이름"))
         item = self.taskTable.horizontalHeaderItem(1)
-        item.setText(_translate("self", "제출기한"))
+        item.setText(_translate("MainWindow", "제출기한"))
         item = self.taskTable.horizontalHeaderItem(2)
-        item.setText(_translate("self", "필요시간"))
+        item.setText(_translate("MainWindow", "필요시간"))
         item = self.taskTable.horizontalHeaderItem(3)
-        item.setText(_translate("self", "분류"))
-        self.addButton.setText(_translate("self", "추가"))
-        self.delButton.setText(_translate("self", "삭제"))
-        self.filemenu.setTitle(_translate("self", "File"))
-        self.viewmenu.setTitle(_translate("self", "View"))
-        self.actionSave.setText(_translate("self", "Save"))
-        self.actionSave.setShortcut(_translate("self", "Ctrl+S"))
-        self.viewCoWork.setText(_translate("self", "CoWork Only"))
+        item.setText(_translate("MainWindow", "분류"))
+        self.delButton.setText(_translate("MainWindow", "삭제"))
+        self.addButton.setText(_translate("MainWindow", "추가"))
+
+        self.btn_nextPage.setText(_translate("MainWindow", "NEXT>>"))
+        self.filemenu.setTitle(_translate("MainWindow", "File"))
+        self.viewmenu.setTitle(_translate("MainWindow", "View"))
+        self.actionSave.setText(_translate("MainWindow", "Save"))
+        self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S"))
+        self.viewCoWork.setText(_translate("MainWindow", "CoWork Only"))
+
+    def setEventListener(self):
+        self.addButton.clicked.connect(self.AAdd)
+        self.delButton.clicked.connect(self.ADelete)
+        self.taskTable.doubleClicked.connect(self.tableDblClicked)
+        self.viewCoWork.toggled.connect(self.updateTable)
+        self.btn_nextPage.clicked.connect(self.AChangeTab)
+
+    def updateUI(self):
+        self.updateTabs()
+        self.updateTable()
 
     def updateTable(self):
         self.taskTable.clearContents()
@@ -120,24 +161,30 @@ class MainWindow(QtWidgets.QMainWindow):
         row = 0
         # FIXME: need more simple code
         co_work_Only = self.viewCoWork.isChecked()
+        for task in self.tasks:
+            if task.co_work and co_work_Only or not co_work_Only:
+                for col in range(4):
+                    self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
+                row += 1
+        """                
         if co_work_Only:
-            for task in self.tasks:
-                if task.co_work:
-                    for col in range(4):
-                        self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
-                    row += 1
+            
         else:
             for task in self.tasks:
                 for col in range(4):
                     self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
                 row += 1
+                """
+        self.tableRow = row
 
+    # TODO: ENBALE CO_WORK OnLy vIEW
+    def updateTabs(self):
+        self.taskTabs.clear()
 
-    def setEventListener(self):
-        self.addButton.clicked.connect(self.AAdd)
-        self.delButton.clicked.connect(self.ADelete)
-        self.taskTable.doubleClicked.connect(self.tableDblClicked)
-        self.viewCoWork.toggled.connect(self.updateTable)
+        for idx, task in enumerate(self.tasks):
+            w = taskWidget(task)
+            self.taskTabs.addTab(w, task.label)
+            w.btn_edit.clicked.connect(lambda: self.AEdit(eventTriggered="tabs", select=idx))
 
     def loadData(self):
         if os.path.isfile('data/tasks.json'):
@@ -148,10 +195,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def tableDblClicked(self):
         selected = self.taskTable.selectedItems()
-        if len(selected) == 0 or selected[0].row() >= len(self.tasks):
+        if len(selected) == 0 or selected[0].row() >= self.tableRow:
             self.AAdd()
         else:
-            self.AEdit(selected[0].row())
+            self.AEdit(eventTriggered="table", select=selected[0])
 
     def AAdd(self):
         dial = Dialog()
@@ -161,24 +208,37 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if task is not None:
             self.tasks.append(task)
-            self.updateTable()
+            self.updateUI()
 
     def ADelete(self):
         selected = self.taskTable.selectedItems()
         selected = [item.text() for item in selected if item is not None and item.column()==0]
         self.tasks.delete(labels=selected) # list of work labels
-        self.updateTable()
+        self.updateUI()
 
     def ASave(self):
         self.tasks.save_file('data/tasks.json', overwrite=True)
 
-    def AEdit(self, row):
-        sub = Dialog(self.tasks[row])
+    def AEdit(self, eventTriggered, select=None):
+        cursor = -1
+        if eventTriggered=="tabs":
+            cursor = select
+        elif eventTriggered=="table":
+            cursor = self.tasks.find(select.text())
+        else:
+            return
+
+        sub = Dialog(self.tasks[cursor])
         sub.exec_()
 
         task = sub.getTask()
-        self.tasks[row] = task
-        self.updateTable()
+
+        if task is not None:
+            self.tasks[cursor] = task
+            self.updateUI()
+
+    def AChangeTab(self):
+        self.stackedWidget.setCurrentIndex(1 - self.stackedWidget.currentIndex())
 
     def closeEvent(self, event):
         close = QtWidgets.QMessageBox()
