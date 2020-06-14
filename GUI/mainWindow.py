@@ -147,8 +147,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.addButton.clicked.connect(self.AAdd)
         self.delButton.clicked.connect(self.ADelete)
         self.taskTable.doubleClicked.connect(self.tableDblClicked)
-        self.viewCoWork.toggled.connect(self.updateTable)
-        self.btn_nextPage.clicked.connect(self.AChangeTab)
+        self.viewCoWork.toggled.connect(self.updateUI)
+        self.btn_nextPage.clicked.connect(self.AChangeStack)
 
     def updateUI(self):
         self.updateTabs()
@@ -159,32 +159,26 @@ class MainWindow(QtWidgets.QMainWindow):
         elem = ['label', 'deadline', 'require', 'type']
 
         row = 0
-        # FIXME: need more simple code
         co_work_Only = self.viewCoWork.isChecked()
         for task in self.tasks:
             if task.co_work and co_work_Only or not co_work_Only:
                 for col in range(4):
                     self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
                 row += 1
-        """                
-        if co_work_Only:
-            
-        else:
-            for task in self.tasks:
-                for col in range(4):
-                    self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
-                row += 1
-                """
+
         self.tableRow = row
 
-    # TODO: ENBALE CO_WORK OnLy vIEW
+    # tODO: view remain time
     def updateTabs(self):
         self.taskTabs.clear()
 
+        co_work_Only = self.viewCoWork.isChecked()
+
         for idx, task in enumerate(self.tasks):
-            w = taskWidget(task)
-            self.taskTabs.addTab(w, task.label)
-            w.btn_edit.clicked.connect(lambda: self.AEdit(eventTriggered="tabs", select=idx))
+            if task.co_work and co_work_Only or not co_work_Only:
+                w = taskWidget(task)
+                self.taskTabs.addTab(w, task.label)
+                w.btn_edit.clicked.connect(lambda: self.AEdit(eventTriggered="tabs", select=idx))
 
     def loadData(self):
         if os.path.isfile('data/tasks.json'):
@@ -223,10 +217,12 @@ class MainWindow(QtWidgets.QMainWindow):
         cursor = -1
         if eventTriggered=="tabs":
             cursor = select
+
         elif eventTriggered=="table":
             cursor = self.tasks.find(select.text())
         else:
             return
+        print(cursor)
 
         sub = Dialog(self.tasks[cursor])
         sub.exec_()
@@ -237,7 +233,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tasks[cursor] = task
             self.updateUI()
 
-    def AChangeTab(self):
+    def AChangeStack(self):
         self.stackedWidget.setCurrentIndex(1 - self.stackedWidget.currentIndex())
 
     def closeEvent(self, event):
