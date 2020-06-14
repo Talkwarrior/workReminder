@@ -98,7 +98,6 @@ class Dialog(QtWidgets.QDialog):
         else:
             self.setupUiWithTask()
 
-
     def retranslateUi(self, taskQuery):
         _translate = QtCore.QCoreApplication.translate
         taskQuery.setWindowTitle(_translate("taskQuery", "과제편집기"))

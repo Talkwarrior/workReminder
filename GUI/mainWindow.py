@@ -3,6 +3,7 @@ import os
 from utils import pyTask
 from .dial import Dialog
 from .taskWidget import taskWidget
+from .timer import callBackTasks
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -11,11 +12,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tasks = pyTask.TaskSeries()
         self.tableRow = len(self.tasks)
 
+        self.timer = callBackTasks(self)
         self.loadData()
         self.setupUi()
 
         self.updateUI()
         self.setEventListener()
+        self.timer.runTasks()
 
     def setupUi(self):
         self.setObjectName("MainWindow")
@@ -171,13 +174,14 @@ class MainWindow(QtWidgets.QMainWindow):
     # tODO: view remain time
     def updateTabs(self):
         self.taskTabs.clear()
+        self.taskTabs.currentWidget()
 
         co_work_Only = self.viewCoWork.isChecked()
-
         for idx, task in enumerate(self.tasks):
             if task.co_work and co_work_Only or not co_work_Only:
                 w = taskWidget(task)
                 self.taskTabs.addTab(w, task.label)
+                # FIXME: selected is fixed to last idx.
                 w.btn_edit.clicked.connect(lambda: self.AEdit(eventTriggered="tabs", select=idx))
 
     def loadData(self):
@@ -250,3 +254,5 @@ class MainWindow(QtWidgets.QMainWindow):
             event.accept()
         else:
             event.ignore()
+
+        self.timer.killTasks()
