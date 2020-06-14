@@ -41,11 +41,24 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="addButton">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>20</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>추가</string>
+    </property>
+   </widget>
    <widget class="QTableWidget" name="taskTable">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
+      <x>10</x>
+      <y>10</y>
       <width>531</width>
       <height>476</height>
      </rect>
@@ -145,19 +158,6 @@
      </property>
     </column>
    </widget>
-   <widget class="QPushButton" name="addButton">
-    <property name="geometry">
-     <rect>
-      <x>560</x>
-      <y>20</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>추가</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="delButton">
     <property name="geometry">
      <rect>
@@ -173,7 +173,7 @@
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QMenuBar" name="menuBar">
+  <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -182,6 +182,20 @@
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="filemenu">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionSave"/>
+   </widget>
+   <widget class="QMenu" name="viewmenu">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="viewCoWork"/>
+   </widget>
+   <addaction name="filemenu"/>
+   <addaction name="viewmenu"/>
   </widget>
   <action name="actionSave">
    <property name="icon">
@@ -191,22 +205,16 @@
    <property name="text">
     <string>Save</string>
    </property>
-   <property name="whatsThis">
-    <string>save task info</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
-   <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
-   </property>
   </action>
-  <action name="action5">
+  <action name="viewCoWork">
    <property name="checkable">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>5</string>
+    <string>CoWork Only</string>
    </property>
   </action>
  </widget>

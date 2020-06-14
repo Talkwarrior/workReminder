@@ -1,6 +1,5 @@
 from PyQt5.QtCore import QDate
 
-
 def normalizeDate(date):
     # converts data format.
     # "토 4 18 2020" -> "2020/04/18"
