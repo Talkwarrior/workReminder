@@ -113,7 +113,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actionSave.setShortcut(_translate("self", "Ctrl+S"))
         self.viewCoWork.setText(_translate("self", "CoWork Only"))
 
-    # TODO: default value is wrong
     def updateTable(self):
         self.taskTable.clearContents()
         elem = ['label', 'deadline', 'require', 'type']

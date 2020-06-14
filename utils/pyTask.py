@@ -61,7 +61,7 @@ class PyTask:
         self.require = dictionary['require']
         self.description = dictionary['description']
         self.co_work = dictionary['co_work']
-
+        return self
 """
     TaskSeries class for workReminder.
     Those are properties(implements list):
