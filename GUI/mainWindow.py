@@ -171,7 +171,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.tableRow = row
 
-    # tODO: view remain time
     def updateTabs(self):
         self.taskTabs.clear()
         self.taskTabs.currentWidget()
@@ -181,8 +180,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if task.co_work and co_work_Only or not co_work_Only:
                 w = taskWidget(task)
                 self.taskTabs.addTab(w, task.label)
-                # FIXME: selected is fixed to last idx.
-                w.btn_edit.clicked.connect(lambda: self.AEdit(eventTriggered="tabs", select=idx))
+                w.btn_edit.clicked.connect(lambda: self.AEdit(eventTriggered="tabs"))
 
     def loadData(self):
         if os.path.isfile('data/tasks.json'):
@@ -220,22 +218,25 @@ class MainWindow(QtWidgets.QMainWindow):
     def AEdit(self, eventTriggered, select=None):
         cursor = -1
         if eventTriggered=="tabs":
-            cursor = select
+            cursor = self.tasks.find(self.taskTabs.currentWidget().lbl_Label.text())
 
         elif eventTriggered=="table":
             cursor = self.tasks.find(select.text())
         else:
             return
-        print(cursor)
 
         sub = Dialog(self.tasks[cursor])
         sub.exec_()
 
         task = sub.getTask()
 
-        if task is not None:
-            self.tasks[cursor] = task
-            self.updateUI()
+        try:
+            if task is not None:
+                self.tasks[cursor] = task
+                self.updateUI()
+        except IndexError:
+            print("AEdit: IndexError")
+            exit(1)
 
     def AChangeStack(self):
         self.stackedWidget.setCurrentIndex(1 - self.stackedWidget.currentIndex())
