@@ -24,22 +24,25 @@ class callBackTasks:
         day = 0
         remain = 0
         while(self.flags[0]):
-            self.timer = self.parent.taskTabs.currentWidget()
-            idx = self.parent.tasks.find(self.timer.lbl_Label.text())
+            try:
+                self.timer = self.parent.taskTabs.currentWidget()
+                idx = self.parent.tasks.find(self.timer.lbl_Label.text())
 
-            # task의 데드라인 읽어오기 -> 남은 초로 변환
-            year, month, day = map(int, self.parent.tasks[idx].deadline.split('/'))
-            timeleft = (datetime.datetime(year, month, day)-datetime.datetime.now()).total_seconds()
+                # task의 데드라인 읽어오기 -> 남은 초로 변환
+                year, month, day = map(int, self.parent.tasks[idx].deadline.split('/'))
+                timeleft = (datetime.datetime(year, month, day)-datetime.datetime.now()).total_seconds()
 
-            # reuse variables
-            # day, hour, minute
-            day, remain = divmod(timeleft, 86400)
-            month, remain = divmod(remain, 3600)
-            year, remain = divmod(remain, 60)
-            self.timer.lcd_Day.display(day)
-            self.timer.lcd_Hour.display(month)
-            self.timer.lcd_Min.display(year)
+                # reuse variables
+                # day, hour, minute
+                day, remain = divmod(timeleft, 86400)
+                month, remain = divmod(remain, 3600)
+                year, remain = divmod(remain, 60)
+                self.timer.lcd_Day.display(day)
+                self.timer.lcd_Hour.display(month)
+                self.timer.lcd_Min.display(year)
 
+            except AttributeError:
+                pass
             time.sleep(1)
 
     def killTasks(self):
