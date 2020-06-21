@@ -83,7 +83,7 @@ class TaskSeries(list):
             super().__init__()
 
     def __str__(self):
-        return ' '.join([str(task) for task in self])
+        return '/'.join([str(task) for task in self])
 
     def load_file(self, filename):
         if filename is None:
@@ -94,6 +94,7 @@ class TaskSeries(list):
         with open(filename, encoding='UTF8') as f:
             data = json.load(f)
         self.extend([PyTask(_dict=task) for task in data['tasks']])
+        return self
 
     def save_file(self, filename, overwrite=False):
         if filename is None:
