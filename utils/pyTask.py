@@ -5,7 +5,7 @@ import json
     task class for workReminder.
     Those are properties:
         "Label": "이름",
-        "deadline": "2020-05-16",
+        "deadline": "2020/05/16/23:00",
         "require": "None",
         "type": "과목이름/프로젝트/수행평가/...",
         "description": "문제수/중요도/연계성"

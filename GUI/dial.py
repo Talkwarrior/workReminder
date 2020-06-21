@@ -38,7 +38,7 @@ class Dialog(QtWidgets.QDialog):
         self.deadline = QtWidgets.QLabel(self.formLayoutWidget)
         self.deadline.setObjectName("deadline")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.deadline)
-        self.DateEdit = QtWidgets.QDateEdit(self.formLayoutWidget)
+        self.DateEdit = QtWidgets.QDateTimeEdit(self.formLayoutWidget)
         self.DateEdit.setCalendarPopup(True)
         self.DateEdit.setTimeSpec(QtCore.Qt.LocalTime)
         self.DateEdit.setDate(QtCore.QDate(2020, 1, 1))
@@ -53,6 +53,7 @@ class Dialog(QtWidgets.QDialog):
         self.TypeBox = QtWidgets.QComboBox(self.formLayoutWidget)
         self.TypeBox.setEditable(True)
         self.TypeBox.setObjectName("TypeBox")
+        self.TypeBox.addItem("")
         self.TypeBox.addItem("")
         self.TypeBox.addItem("")
         self.TypeBox.addItem("")
@@ -94,7 +95,7 @@ class Dialog(QtWidgets.QDialog):
         QtCore.QMetaObject.connectSlotsByName(self)
 
         if self.task is None:
-            self.DateEdit.setDate(QtCore.QDate.currentDate())
+            self.DateEdit.setDateTime(QtCore.QDateTime.currentDateTime())
         else:
             self.setupUiWithTask()
 
@@ -108,7 +109,8 @@ class Dialog(QtWidgets.QDialog):
         self.TypeBox.setItemText(0, _translate("taskQuery", "수행평가"))
         self.TypeBox.setItemText(1, _translate("taskQuery", "사이드 프로젝트"))
         self.TypeBox.setItemText(2, _translate("taskQuery", "대회"))
-        self.TypeBox.setItemText(3, _translate("taskQuery", "기타: "))
+        self.TypeBox.setItemText(3, _translate("taskQuery", "일반 과제"))
+        self.TypeBox.setItemText(4, _translate("taskQuery", "기타: "))
         self.co_work.setText(_translate("taskQuery", "팀과제"))
         self.description.setText(_translate("taskQuery", "설명"))
         self.DescriptionEdit.setPlaceholderText(_translate("taskQuery", "문제수/중요도/연계성 등"))
@@ -118,9 +120,10 @@ class Dialog(QtWidgets.QDialog):
     def setupUiWithTask(self):
         self.LblEdit.setText(self.task.label)
 
-        self.DateEdit.setDate(QtCore.QDate.fromString(self.task.deadline, "yyyy/MM/dd"))
+        self.DateEdit.setDateTime(QtCore.QDateTime.fromString(self.task.deadline, "yyyy/MM/dd/hh:mm"))
         self.DescriptionEdit.setPlainText(self.task.description)
 
+        # TODO: fix typebox label to real types
         if self.task.type in types.keys():
             self.TypeBox.setCurrentIndex(types[self.task.type])
         else:
@@ -131,7 +134,7 @@ class Dialog(QtWidgets.QDialog):
     def accept(self):
         dic = {}
         dic['label'] = self.LblEdit.text()
-        dic['deadline'] = normalizeDate(self.DateEdit.date().toString())  # PyQt5.QtCore.QDate(2020, 1, 1)
+        dic['deadline'] = normalizeDateTime(self.DateEdit.dateTime().toString())  # PyQt5.QtCore.QDateTime(2020, 1, 1, 12, 0)
         dic['description'] = self.DescriptionEdit.toPlainText()
         dic['type'] = self.TypeBox.currentText()
         dic['require'] = normalizeTime(self.TimeEdit.time().toString())  # PyQt5.QtCore.QTime(12, 0)

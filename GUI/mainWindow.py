@@ -24,8 +24,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def setupUi(self):
         self.setObjectName("MainWindow")
         self.resize(670, 587)
-        self.setMinimumSize(QtCore.QSize(670, 400))
-        self.setMaximumSize(QtCore.QSize(670, 800))
+        self.setMinimumSize(QtCore.QSize(670, 587))
+        self.setMaximumSize(QtCore.QSize(670, 587))
         self.setDocumentMode(False)
         self.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.setDockNestingEnabled(False)
@@ -185,6 +185,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 for col in range(4):
                     self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
                 row += 1
+
+        self.taskTable.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        self.taskTable.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+        self.taskTable.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
+        self.taskTable.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
+
 
         self.tableRow = row
 
