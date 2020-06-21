@@ -5,6 +5,7 @@ from .dial import Dialog
 from .taskWidget import taskWidget
 from .timer import callBackTasks
 
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -163,7 +164,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def toggleViewOnTop(self):
         if self.viewOnTop.isChecked():
-            self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowStaysOnTopHint )
+            self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
             self.show()
         else:
             self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowStaysOnTopHint)
@@ -214,6 +215,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def AAdd(self):
         dial = Dialog()
+        if self.viewOnTop.isChecked():
+            dial.setWindowFlags( dial.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
         dial.exec_()
 
         task = dial.getTask()
@@ -224,8 +227,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def ADelete(self):
         selected = self.taskTable.selectedItems()
-        selected = [item.text() for item in selected if item is not None and item.column()==0]
-        self.tasks.delete(labels=selected) # list of work labels
+        selected = [item.text() for item in selected if item is not None and item.column() == 0]
+        self.tasks.delete(labels=selected)  # list of work labels
         self.updateUI()
 
     def ASave(self):
@@ -233,15 +236,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def AEdit(self, eventTriggered, select=None):
         cursor = -1
-        if eventTriggered=="tabs":
+        if eventTriggered == "tabs":
             cursor = self.tasks.find(self.taskTabs.currentWidget().lbl_Label.text())
 
-        elif eventTriggered=="table":
+        elif eventTriggered == "table":
             cursor = self.tasks.find(select.text())
         else:
             return
 
         sub = Dialog(self.tasks[cursor])
+        if self.viewOnTop.isChecked():
+            sub.setWindowFlags(sub.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
         sub.exec_()
 
         task = sub.getTask()
