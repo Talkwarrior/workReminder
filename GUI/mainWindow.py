@@ -114,8 +114,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.viewCoWork = QtWidgets.QAction(self)
         self.viewCoWork.setCheckable(True)
         self.viewCoWork.setObjectName("viewCoWork")
+        # always on top
+        self.viewOnTop = QtWidgets.QAction(self)
+        self.viewOnTop.setCheckable(True)
+        self.viewOnTop.setObjectName("viewOnTop")
+
         self.filemenu.addAction(self.actionSave)
         self.viewmenu.addAction(self.viewCoWork)
+        self.viewmenu.addAction(self.viewOnTop)
         self.menubar.addAction(self.filemenu.menuAction())
         self.menubar.addAction(self.viewmenu.menuAction())
 
@@ -145,13 +151,23 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actionSave.setText(_translate("MainWindow", "Save"))
         self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S"))
         self.viewCoWork.setText(_translate("MainWindow", "CoWork Only"))
+        self.viewOnTop.setText(_translate("MainWindow", "창 위에 고정"))
 
     def setEventListener(self):
         self.addButton.clicked.connect(self.AAdd)
         self.delButton.clicked.connect(self.ADelete)
         self.taskTable.doubleClicked.connect(self.tableDblClicked)
         self.viewCoWork.toggled.connect(self.updateUI)
+        self.viewOnTop.toggled.connect(self.toggleViewOnTop)
         self.btn_nextPage.clicked.connect(self.AChangeStack)
+
+    def toggleViewOnTop(self):
+        if self.viewOnTop.isChecked():
+            self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowStaysOnTopHint )
+            self.show()
+        else:
+            self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowStaysOnTopHint)
+            self.show()
 
     def updateUI(self):
         self.updateTabs()
@@ -243,6 +259,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         close = QtWidgets.QMessageBox()
+        if self.viewOnTop.isChecked():
+            close.setWindowFlags(close.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
+
         close.setText("저장하시겠습니까?")
         close.setWindowTitle("종료하기")
         close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Cancel)
