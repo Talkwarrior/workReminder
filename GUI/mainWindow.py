@@ -158,6 +158,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.addButton.clicked.connect(self.AAdd)
         self.delButton.clicked.connect(self.ADelete)
         self.taskTable.doubleClicked.connect(self.tableDblClicked)
+        self.actionSave.triggered.connect(self.ASave)
         self.viewCoWork.toggled.connect(self.updateUI)
         self.viewOnTop.toggled.connect(self.toggleViewOnTop)
         self.btn_nextPage.clicked.connect(self.AChangeStack)
@@ -239,6 +240,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def ASave(self):
         self.tasks.save_file('data/tasks.json', overwrite=True)
+
+        # create empty flag file
+        # this will notify the autoReminder.py
+        with open("./data/modified.flag", "w") as f:
+            pass
 
     def AEdit(self, eventTriggered, select=None):
         cursor = -1

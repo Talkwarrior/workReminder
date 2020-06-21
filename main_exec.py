@@ -1,6 +1,5 @@
 from GUI.mainWindow import MainWindow
 from PyQt5 import QtWidgets
-from utils.reminder import reminder
 
 if __name__ == "__main__":
     import sys
@@ -8,3 +7,4 @@ if __name__ == "__main__":
     MainWindow = MainWindow()
     MainWindow.show()
     app.exec_()
+
