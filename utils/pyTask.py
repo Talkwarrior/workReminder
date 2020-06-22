@@ -1,4 +1,5 @@
 import os
+import datetime
 import json
 
 """
@@ -62,6 +63,22 @@ class PyTask:
         self.description = dictionary['description']
         self.co_work = dictionary['co_work']
         return self
+
+    def getRemainTime(self):
+        # task의 데드라인 읽어오기 -> 남은 초로 변환
+        year, month, day, p = self.deadline.split('/')
+        hour, minute = map(int, p.split(':'))
+        timeleft = (datetime.datetime(int(year), int(month), int(day), hour, minute)
+                    - datetime.datetime.now()).total_seconds()
+
+        # reuse variables
+        # day, hour, minute
+        day, remain = divmod(timeleft, 86400)
+        hour, remain = divmod(remain, 3600)
+        minute, remain = divmod(remain, 60)
+
+        return (day, hour, minute)
+
 """
     TaskSeries class for workReminder.
     Those are properties(implements list):

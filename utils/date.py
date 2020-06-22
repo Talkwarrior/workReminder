@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QDate
+from utils.pyTask import PyTask
 
 def normalizeDateTime(date):
     # converts data format.
@@ -12,7 +12,6 @@ def normalizeTime(time):
     # "15:00:00" -> "15h 00m"
     time = time.split(':')
     return f"{time[0]}h {time[1]}m"
-
 
 if __name__ == '__main__':
     print("A Module to convert date/time format")

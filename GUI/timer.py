@@ -25,16 +25,8 @@ class callBackTasks:
                 idx = self.parent.tasks.find(self.timer.lbl_Label.text())
 
                 # task의 데드라인 읽어오기 -> 남은 초로 변환
-                year, month, day, p = self.parent.tasks[idx].deadline.split('/')
-                hour, minute = map(int, p.split(':'))
-                timeleft = (datetime.datetime(int(year), int(month), int(day), hour, minute)
-                            -datetime.datetime.now()).total_seconds()
+                day, hour, minute = self.parent.tasks[idx].getRemainTime()
 
-                # reuse variables
-                # day, hour, minute
-                day, remain = divmod(timeleft, 86400)
-                hour, remain = divmod(remain, 3600)
-                minute, remain = divmod(remain, 60)
                 self.timer.lcd_Day.display(day)
                 self.timer.lcd_Hour.display(hour)
                 self.timer.lcd_Min.display(minute)
