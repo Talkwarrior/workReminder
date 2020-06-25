@@ -204,7 +204,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if task.co_work and co_work_Only or not co_work_Only:
                 w = taskWidget(task)
                 self.taskTabs.addTab(w, task.label)
-                w.btn_edit.clicked.connect(lambda: self.AEdit(eventTriggered="tabs"))
+                w.btn_edit.clicked.connect(lambda : self.AEdit(eventTriggered="tabs"))
 
     def loadData(self):
         if os.path.isfile('data/tasks.json'):
@@ -218,7 +218,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if len(selected) == 0 or selected[0].row() >= self.tableRow:
             self.AAdd()
         else:
-            self.AEdit(eventTriggered="table", select=selected[0])
+            self.AEdit(eventTriggered="table", select=selected[0].text())
 
     def AAdd(self):
         dial = Dialog()
@@ -252,7 +252,7 @@ class MainWindow(QtWidgets.QMainWindow):
             cursor = self.tasks.find(self.taskTabs.currentWidget().lbl_Label.text())
 
         elif eventTriggered == "table":
-            cursor = self.tasks.find(select.text())
+            cursor = self.tasks.find(select)
         else:
             return
 
