@@ -1,11 +1,12 @@
 import os
+import datetime
 import json
 
 """
     task class for workReminder.
     Those are properties:
         "Label": "이름",
-        "deadline": "2020-05-16",
+        "deadline": "2020/05/16/23:00",
         "require": "None",
         "type": "과목이름/프로젝트/수행평가/...",
         "description": "문제수/중요도/연계성"
@@ -62,6 +63,25 @@ class PyTask:
         self.description = dictionary['description']
         self.co_work = dictionary['co_work']
         return self
+
+    def getRemainTime(self, total_seconds=False):
+        # task의 데드라인 읽어오기 -> 남은 초로 변환
+        year, month, day, p = self.deadline.split('/')
+        hour, minute = map(int, p.split(':'))
+        timeleft = (datetime.datetime(int(year), int(month), int(day), hour, minute)
+                    - datetime.datetime.now()).total_seconds()
+
+        if (total_seconds):
+            return timeleft
+
+        # reuse variables
+        # day, hour, minute
+        day, remain = divmod(timeleft, 86400)
+        hour, remain = divmod(remain, 3600)
+        minute, remain = divmod(remain, 60)
+
+        return (day, hour, minute)
+
 """
     TaskSeries class for workReminder.
     Those are properties(implements list):
@@ -83,7 +103,7 @@ class TaskSeries(list):
             super().__init__()
 
     def __str__(self):
-        return ' '.join([str(task) for task in self])
+        return '/'.join([str(task) for task in self])
 
     def load_file(self, filename):
         if filename is None:
@@ -94,6 +114,7 @@ class TaskSeries(list):
         with open(filename, encoding='UTF8') as f:
             data = json.load(f)
         self.extend([PyTask(_dict=task) for task in data['tasks']])
+        return self
 
     def save_file(self, filename, overwrite=False):
         if filename is None:

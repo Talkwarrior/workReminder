@@ -5,6 +5,7 @@ from .dial import Dialog
 from .taskWidget import taskWidget
 from .timer import callBackTasks
 
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,8 +24,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def setupUi(self):
         self.setObjectName("MainWindow")
         self.resize(670, 587)
-        self.setMinimumSize(QtCore.QSize(670, 400))
-        self.setMaximumSize(QtCore.QSize(670, 800))
+        self.setMinimumSize(QtCore.QSize(670, 587))
+        self.setMaximumSize(QtCore.QSize(670, 587))
         self.setDocumentMode(False)
         self.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.setDockNestingEnabled(False)
@@ -114,8 +115,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.viewCoWork = QtWidgets.QAction(self)
         self.viewCoWork.setCheckable(True)
         self.viewCoWork.setObjectName("viewCoWork")
+        # always on top
+        self.viewOnTop = QtWidgets.QAction(self)
+        self.viewOnTop.setCheckable(True)
+        self.viewOnTop.setObjectName("viewOnTop")
+
         self.filemenu.addAction(self.actionSave)
         self.viewmenu.addAction(self.viewCoWork)
+        self.viewmenu.addAction(self.viewOnTop)
         self.menubar.addAction(self.filemenu.menuAction())
         self.menubar.addAction(self.viewmenu.menuAction())
 
@@ -145,13 +152,24 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actionSave.setText(_translate("MainWindow", "Save"))
         self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S"))
         self.viewCoWork.setText(_translate("MainWindow", "CoWork Only"))
+        self.viewOnTop.setText(_translate("MainWindow", "창 위에 고정"))
 
     def setEventListener(self):
         self.addButton.clicked.connect(self.AAdd)
         self.delButton.clicked.connect(self.ADelete)
         self.taskTable.doubleClicked.connect(self.tableDblClicked)
+        self.actionSave.triggered.connect(self.ASave)
         self.viewCoWork.toggled.connect(self.updateUI)
+        self.viewOnTop.toggled.connect(self.toggleViewOnTop)
         self.btn_nextPage.clicked.connect(self.AChangeStack)
+
+    def toggleViewOnTop(self):
+        if self.viewOnTop.isChecked():
+            self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
+            self.show()
+        else:
+            self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowStaysOnTopHint)
+            self.show()
 
     def updateUI(self):
         self.updateTabs()
@@ -169,9 +187,14 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.taskTable.setItem(row, col, QtWidgets.QTableWidgetItem(task.__dict__()[elem[col]]))
                 row += 1
 
+        self.taskTable.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        self.taskTable.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+        self.taskTable.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
+        self.taskTable.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
+
+
         self.tableRow = row
 
-    # tODO: view remain time
     def updateTabs(self):
         self.taskTabs.clear()
         self.taskTabs.currentWidget()
@@ -181,8 +204,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if task.co_work and co_work_Only or not co_work_Only:
                 w = taskWidget(task)
                 self.taskTabs.addTab(w, task.label)
-                # FIXME: selected is fixed to last idx.
-                w.btn_edit.clicked.connect(lambda: self.AEdit(eventTriggered="tabs", select=idx))
+                w.btn_edit.clicked.connect(lambda : self.AEdit(eventTriggered="tabs"))
 
     def loadData(self):
         if os.path.isfile('data/tasks.json'):
@@ -196,10 +218,12 @@ class MainWindow(QtWidgets.QMainWindow):
         if len(selected) == 0 or selected[0].row() >= self.tableRow:
             self.AAdd()
         else:
-            self.AEdit(eventTriggered="table", select=selected[0])
+            self.AEdit(eventTriggered="table", select=selected[0].text())
 
     def AAdd(self):
         dial = Dialog()
+        if self.viewOnTop.isChecked():
+            dial.setWindowFlags( dial.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
         dial.exec_()
 
         task = dial.getTask()
@@ -210,38 +234,51 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def ADelete(self):
         selected = self.taskTable.selectedItems()
-        selected = [item.text() for item in selected if item is not None and item.column()==0]
-        self.tasks.delete(labels=selected) # list of work labels
+        selected = [item.text() for item in selected if item is not None and item.column() == 0]
+        self.tasks.delete(labels=selected)  # list of work labels
         self.updateUI()
 
     def ASave(self):
         self.tasks.save_file('data/tasks.json', overwrite=True)
 
+        # create empty flag file
+        # this will notify the autoReminder.py
+        with open("./data/modified.flag", "w") as f:
+            pass
+
     def AEdit(self, eventTriggered, select=None):
         cursor = -1
-        if eventTriggered=="tabs":
-            cursor = select
+        if eventTriggered == "tabs":
+            cursor = self.tasks.find(self.taskTabs.currentWidget().lbl_Label.text())
 
-        elif eventTriggered=="table":
-            cursor = self.tasks.find(select.text())
+        elif eventTriggered == "table":
+            cursor = self.tasks.find(select)
         else:
             return
-        print(cursor)
 
         sub = Dialog(self.tasks[cursor])
+        if self.viewOnTop.isChecked():
+            sub.setWindowFlags(sub.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
         sub.exec_()
 
         task = sub.getTask()
 
-        if task is not None:
-            self.tasks[cursor] = task
-            self.updateUI()
+        try:
+            if task is not None:
+                self.tasks[cursor] = task
+                self.updateUI()
+        except IndexError:
+            print("AEdit: IndexError")
+            exit(1)
 
     def AChangeStack(self):
         self.stackedWidget.setCurrentIndex(1 - self.stackedWidget.currentIndex())
 
     def closeEvent(self, event):
         close = QtWidgets.QMessageBox()
+        if self.viewOnTop.isChecked():
+            close.setWindowFlags(close.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
+
         close.setText("저장하시겠습니까?")
         close.setWindowTitle("종료하기")
         close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Cancel)
