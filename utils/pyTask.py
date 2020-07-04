@@ -64,12 +64,15 @@ class PyTask:
         self.co_work = dictionary['co_work']
         return self
 
-    def getRemainTime(self):
+    def getRemainTime(self, total_seconds=False):
         # task의 데드라인 읽어오기 -> 남은 초로 변환
         year, month, day, p = self.deadline.split('/')
         hour, minute = map(int, p.split(':'))
         timeleft = (datetime.datetime(int(year), int(month), int(day), hour, minute)
                     - datetime.datetime.now()).total_seconds()
+
+        if (total_seconds):
+            return timeleft
 
         # reuse variables
         # day, hour, minute
