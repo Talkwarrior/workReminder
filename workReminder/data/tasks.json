@@ -1,0 +1,44 @@
+{
+	"tasks": [
+		{
+			"label": "최재혁쌤 과제(수)",
+			"deadline": "2020/07/08/18:00",
+			"type": "일반 과제",
+			"require": "00h 00m",
+			"description": "앞에 것과 헷갈리지 않게",
+			"co_work": false
+		},
+		{
+			"label": "물리 12장",
+			"deadline": "2020/07/10/13:20",
+			"type": "수행평가",
+			"require": "02h 00m",
+			"description": "박한얼쌤 과제",
+			"co_work": false
+		},
+		{
+			"label": "지원받을 전공도서 신청",
+			"deadline": "2020/07/13/10:00",
+			"type": "기타: ",
+			"require": "00h 02m",
+			"description": "잘 합시다",
+			"co_work": false
+		},
+		{
+			"label": "물리 통신교육",
+			"deadline": "2020/07/31/22:00",
+			"type": "대회",
+			"require": "00h 00m",
+			"description": "44문제 풀어야됨",
+			"co_work": false
+		},
+		{
+			"label": "nudge3",
+			"deadline": "2021/07/08/10:30",
+			"type": "수행평가",
+			"require": "00h 20m",
+			"description": "넛지의 귀환.",
+			"co_work": false
+		}
+	]
+}
