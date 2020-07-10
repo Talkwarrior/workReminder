@@ -109,7 +109,6 @@ class TaskSeries(list):
         if filename is None:
             return
         if not os.path.isfile(filename):
-            print(f"Cannot Read {filename}. The file is not exist.")
             return
         with open(filename, encoding='UTF8') as f:
             data = json.load(f)
@@ -120,7 +119,6 @@ class TaskSeries(list):
         if filename is None:
             return False
         if os.path.isfile(filename) and not overwrite:
-            print(f"Cannot Overwrite {filename}. The file already exists.")
             return False
         with open(filename, 'w', encoding='UTF8') as f:
             data = dict()
