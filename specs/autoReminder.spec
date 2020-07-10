@@ -3,11 +3,18 @@
 block_cipher = None
 
 
-a = Analysis(['autoReminder.py'],
-             pathex=['C:\\Users\\user\\Desktop\\Computer_Science\\Programming\\Python\\workReminder'],
+a = Analysis(['..\\.\\srcs\\autoReminder.py'],
+             pathex=['..\\.\\srcs',
+                     r'C:\Users\user\Anaconda3\envs\workReminder\Lib\site-packages'],
              binaries=[],
              datas=[],
-             hiddenimports=[],
+             hiddenimports=['win32com',
+                            'termios',
+                            'pyimod03_importers',
+                            'pkg_resources',
+                            'pkg_resources.py2_warn',
+                            'resource'
+                            ],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -31,3 +38,4 @@ exe = EXE(pyz,
           upx_exclude=[],
           runtime_tmpdir=None,
           console=False )
+          

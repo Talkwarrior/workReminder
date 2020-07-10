@@ -3,10 +3,10 @@
 block_cipher = None
 
 
-a = Analysis(['main_exec.py'],
-             pathex=['C:\\Users\\user\\Desktop\\Computer_Science\\Programming\\Python\\workReminder'],
+a = Analysis(['..\\.\\srcs\\main_exec.py'],
+             pathex=['..\\.\\srcs'],
              binaries=[],
-             datas=[('./data', './data')],
+             datas=[('..\\.\\srcs\\data', './data')],
              hiddenimports=['utils.pyTask', 
                             'utils.date', 
                             'GUI.dial', 
