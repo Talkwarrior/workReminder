@@ -109,7 +109,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(self)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../data/images/save.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("./data/images/save.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionSave.setIcon(icon)
         self.actionSave.setObjectName("actionSave")
         self.viewCoWork = QtWidgets.QAction(self)
@@ -239,7 +239,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.updateUI()
 
     def ASave(self):
-        self.tasks.save_file('data/tasks.json', overwrite=True)
+        self.tasks.save_file('./data/tasks.json', overwrite=True)
 
         # create empty flag file
         # this will notify the autoReminder.py
